@@ -6,6 +6,7 @@ import com.javaded.service.TaskService;
 import com.javaded.service.UserService;
 import com.javaded.web.dto.task.TaskDto;
 import com.javaded.web.dto.user.UserDto;
+import com.javaded.web.dto.validation.OnCreate;
 import com.javaded.web.dto.validation.OnUpdate;
 import com.javaded.web.mappers.TaskMapper;
 import com.javaded.web.mappers.UserMapper;
@@ -56,7 +57,7 @@ public class UserController {
 
     @PostMapping("/{id}/tasks")
     public TaskDto createTask(@PathVariable Long id,
-                              @Validated(OnUpdate.class) @RequestBody TaskDto taskDto) {
+                              @Validated(OnCreate.class) @RequestBody TaskDto taskDto) {
         Task task = taskMapper.toEntity(taskDto);
         Task createTtask = taskService.create(task, id);
         return taskMapper.toDto(createTtask);

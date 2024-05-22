@@ -1,12 +1,11 @@
 package com.javaded.web.dto.auth;
 
-import lombok.Data;
+import lombok.Builder;
 
-@Data
-public class JwtResponse {
-
-    private Long id;
-    private String username;
-    private String accessToken;
-    private String refreshToken;
+@Builder
+public record JwtResponse(Long id,
+                          String username,
+                          String accessToken,
+                          String refreshToken
+) {
 }
