@@ -15,7 +15,7 @@ public interface UserRepository {
 
     void delete(Long id);
 
-    User create(User user);
+    void create(User user);
 
     void insertUserRole(Long id, Role role);
 
