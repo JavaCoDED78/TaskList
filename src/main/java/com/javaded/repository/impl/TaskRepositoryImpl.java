@@ -70,11 +70,13 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Optional<Task> findById(Long id) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_BY_ID)) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(FIND_BY_ID);
             statement.setLong(1, id);
-            ResultSet rs = statement.executeQuery();
-            return Optional.ofNullable(TaskRowMapper.mapRow(rs));
+            try (ResultSet rs = statement.executeQuery()) {
+                return Optional.ofNullable(TaskRowMapper.mapRow(rs));
+            }
         } catch (SQLException e) {
             throw new ResourceMappingException(String.format("Exception while finding task by id: %s", id));
         }
@@ -86,8 +88,9 @@ public class TaskRepositoryImpl implements TaskRepository {
             Connection connection = dataSourceConfig.getConnection();
             PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_USER_ID);
             statement.setLong(1, userId);
-            ResultSet rs = statement.executeQuery();
-            return TaskRowMapper.mapRows(rs);
+            try (ResultSet rs = statement.executeQuery()) {
+                return TaskRowMapper.mapRows(rs);
+            }
         } catch (SQLException e) {
             throw new ResourceMappingException(String.format("Error while finding all by user id: %s", userId));
         }
@@ -95,8 +98,9 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void assignToUserById(Long taskId, Long userId) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(ASSIGN)) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(ASSIGN);
             statement.setLong(1, taskId);
             statement.setLong(2, userId);
             statement.executeUpdate();
@@ -107,9 +111,21 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void update(Task task) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE)) {
-            buildPrepareStatement(task, statement);
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(UPDATE);
+            statement.setString(1, task.getTitle());
+            if (task.getDescription() == null) {
+                statement.setNull(2, Types.VARCHAR);
+            } else {
+                statement.setString(2, task.getDescription());
+            }
+            if (task.getExpirationDate() == null) {
+                statement.setNull(3, Types.TIMESTAMP);
+            } else {
+                statement.setTimestamp(3, Timestamp.valueOf(task.getExpirationDate()));
+            }
+            statement.setString(4, task.getStatus().name());
             statement.setLong(5, task.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -117,30 +133,28 @@ public class TaskRepositoryImpl implements TaskRepository {
         }
     }
 
-    private static void buildPrepareStatement(Task task, PreparedStatement statement) throws SQLException {
-        statement.setString(1, task.getTitle());
-        if (task.getDescription() == null) {
-            statement.setNull(2, Types.VARCHAR);
-        } else {
-            statement.setString(2, task.getDescription());
-        }
-        if (task.getExpirationDate() == null) {
-            statement.setNull(3, Types.TIMESTAMP);
-        } else {
-            statement.setTimestamp(3, Timestamp.valueOf(task.getExpirationDate()));
-        }
-        statement.setString(4, task.getStatus().name());
-    }
-
     @Override
     public void create(Task task) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(CREATE, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            buildPrepareStatement(task, statement);
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setString(1, task.getTitle());
+            if (task.getDescription() == null) {
+                statement.setNull(2, Types.VARCHAR);
+            } else {
+                statement.setString(2, task.getDescription());
+            }
+            if (task.getExpirationDate() == null) {
+                statement.setNull(3, Types.TIMESTAMP);
+            } else {
+                statement.setTimestamp(3, Timestamp.valueOf(task.getExpirationDate()));
+            }
+            statement.setString(4, task.getStatus().name());
             statement.executeUpdate();
-            ResultSet rs = statement.getGeneratedKeys();
-            rs.next();
-            task.setId(rs.getLong(1));
+            try (ResultSet rs = statement.getGeneratedKeys()) {
+                rs.next();
+                task.setId(rs.getLong(1));
+            }
         } catch (SQLException e) {
             throw new ResourceMappingException("Error while creating task.");
         }
@@ -148,8 +162,9 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void delete(Long id) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE)) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(DELETE);
             statement.setLong(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {

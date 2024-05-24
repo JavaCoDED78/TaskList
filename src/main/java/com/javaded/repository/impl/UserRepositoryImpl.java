@@ -91,13 +91,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findById(Long id) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_BY_ID,
-                     ResultSet.TYPE_SCROLL_INSENSITIVE,
-                     ResultSet.CONCUR_READ_ONLY)) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(FIND_BY_ID,
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             statement.setLong(1, id);
-            ResultSet rs = statement.executeQuery();
-            return Optional.ofNullable(UserRowMapper.mapRow(rs));
+            try (ResultSet rs = statement.executeQuery()) {
+                return Optional.ofNullable(UserRowMapper.mapRow(rs));
+            }
         } catch (SQLException e) {
             throw new ResourceMappingException(String.format("Exception while finding user by id: %s", id));
         }
@@ -105,13 +107,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_BY_USERNAME,
-                     ResultSet.TYPE_SCROLL_INSENSITIVE,
-                     ResultSet.CONCUR_READ_ONLY)) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(FIND_BY_USERNAME,
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             statement.setString(1, username);
-            ResultSet rs = statement.executeQuery();
-            return Optional.ofNullable(UserRowMapper.mapRow(rs));
+            try (ResultSet rs = statement.executeQuery()) {
+                return Optional.ofNullable(UserRowMapper.mapRow(rs));
+            }
         } catch (SQLException e) {
             throw new ResourceMappingException(String.format("Exception while finding user by username: %s", username));
         }
@@ -119,13 +123,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void update(User user) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE)) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(UPDATE);
             statement.setString(1, user.getName());
             statement.setString(2, user.getUsername());
             statement.setString(3, user.getPassword());
             statement.setLong(4, user.getId());
-            statement.executeUpdate();
         } catch (SQLException e) {
             throw new ResourceMappingException("Exception while updating user.");
         }
@@ -133,15 +137,17 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void create(User user) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(CREATE, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, user.getName());
             statement.setString(2, user.getUsername());
             statement.setString(3, user.getPassword());
             statement.executeUpdate();
-            ResultSet rs = statement.getGeneratedKeys();
-            rs.next();
-            user.setId(rs.getLong(1));
+            try (ResultSet rs = statement.getGeneratedKeys()) {
+                rs.next();
+                user.setId(rs.getLong(1));
+            }
         } catch (SQLException e) {
             throw new ResourceMappingException("Exception while creating user.");
         }
@@ -149,8 +155,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void insertUserRole(Long userId, Role role) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_USER_ROLE)) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(INSERT_USER_ROLE);
             statement.setLong(1, userId);
             statement.setString(2, role.name());
             statement.executeUpdate();
@@ -161,13 +168,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean isTaskOwner(Long userId, Long taskId) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(IS_TASK_OWNER)) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(IS_TASK_OWNER);
             statement.setLong(1, userId);
             statement.setLong(2, taskId);
-            ResultSet rs = statement.executeQuery();
-            rs.next();
-            return rs.getBoolean(1);
+            try (ResultSet rs = statement.executeQuery()) {
+                rs.next();
+                return rs.getBoolean(1);
+            }
         } catch (SQLException e) {
             throw new ResourceMappingException("Exception while checking if user is task owner..");
         }
@@ -175,8 +184,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void delete(Long id) {
-        try (Connection connection = dataSourceConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE)) {
+        try {
+            Connection connection = dataSourceConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(DELETE);
             statement.setLong(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {

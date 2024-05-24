@@ -10,6 +10,8 @@ import com.javaded.web.dto.validation.OnCreate;
 import com.javaded.web.dto.validation.OnUpdate;
 import com.javaded.web.mappers.TaskMapper;
 import com.javaded.web.mappers.UserMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,9 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "User Controller", description = "User API")
 public class UserController {
 
     private final UserService userService;
@@ -35,29 +38,34 @@ public class UserController {
     private final TaskMapper taskMapper;
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get UserDto by id")
     public UserDto getById(@PathVariable Long id) {
         User user = userService.getBId(id);
         return userMapper.toDto(user);
     }
 
     @PutMapping
+    @Operation(summary = "Update user")
     public UserDto update(@Validated(OnUpdate.class) @RequestBody UserDto userDto) {
         User user = userService.update(userMapper.toEntity(userDto));
         return userMapper.toDto(user);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete user by id")
     public void deleteById(@PathVariable Long id) {
         userService.delete(id);
     }
 
     @GetMapping("/{id}/tasks")
+    @Operation(summary = "Get all User tasks")
     public List<TaskDto> getTasksByUserId(@PathVariable Long id) {
         List<Task> tasks = taskService.getAllByUserId(id);
         return taskMapper.toDto(tasks);
     }
 
     @PostMapping("/{id}/tasks")
+    @Operation(summary = "Add task to user")
     public TaskDto createTask(@PathVariable Long id,
                               @Validated(OnCreate.class) @RequestBody TaskDto taskDto) {
         Task task = taskMapper.toEntity(taskDto);

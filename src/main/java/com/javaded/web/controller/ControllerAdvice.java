@@ -7,6 +7,7 @@ import com.javaded.domain.exception.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -67,10 +68,11 @@ public class ControllerAdvice {
         return exceptionBody;
     }
 
+
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleAuthentication(AuthenticationException e) {
-        return new ExceptionBody("Authentication failed.");
+        return new ExceptionBody("Authentication failed. PLEASE TRY AGAIN WITH CORRECT CREDENTIALS");
     }
 
     @ExceptionHandler(Exception.class)

@@ -1,24 +1,30 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/tasklist?currentSchema=tasklist
+    url: jdbc:postgresql://localhost:5432/tasklist
     username: postgres
     password: pass
     driver-class-name: org.postgresql.Driver
+
   sql:
     init:
-      mode: always
+      mode: never
       continue-on-error: false
 #      data-locations: classpath:demo_data.sql
-#  liquibase:
-#    change-log: classpath:liquibase/db.changelog.yaml
-#    enabled: true
-#    default-schema: tasklist
+
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yaml
+    enabled: true
+    default-schema: tasklist
+
 #mybatis:
-#  mapper-locations: classpath:mybatis/mapper/*.xml
+#  mapper-locations: classpath*:mybatis/mapper/*.xml
+##  type-aliases-package: com.javaded.domain
+
 security:
   jwt:
     secret: aGZiYmtiYWllYmNpZWFpZWJsZWNldWNlY2xhZWNhaWJlbGNhZWN3Q0VCV0VXSUM=
     access: 1
     refresh: 30
-#springdoc:
-#  override-with-generic-response: false
+
+springdoc:
+  override-with-generic-response: false
