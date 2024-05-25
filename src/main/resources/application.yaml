@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/tasklist
+    url: jdbc:postgresql://localhost:5432/tasklist?currentSchema=tasklist
     username: postgres
     password: pass
     driver-class-name: org.postgresql.Driver
@@ -16,9 +16,9 @@ spring:
     enabled: true
     default-schema: tasklist
 
-#mybatis:
-#  mapper-locations: classpath*:mybatis/mapper/*.xml
-##  type-aliases-package: com.javaded.domain
+mybatis:
+  mapper-locations: classpath:mybatis.mappers/*.xml
+#  type-aliases-package: com.javaded.domain
 
 security:
   jwt:
