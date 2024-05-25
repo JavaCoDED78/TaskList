@@ -2,6 +2,7 @@ version: '3'
 
 services:
   app:
+    restart: always
     build:
       context: .
     container_name: tasklist

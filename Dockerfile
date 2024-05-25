@@ -1,10 +1,11 @@
 FROM maven:3.9.6-amazoncorretto-21 AS build
-WORKDIR /
-COPY /src /src
-COPY pom.xml /
-RUN mvn -f /pom.xml clean package
+WORKDIR /app
+COPY src ./src
+COPY pom.xml ./
+RUN mvn -f /app/pom.xml clean package
 
 FROM openjdk:21-jdk-slim
-COPY --from=build /target/*.jar application.jar
+WORKDIR /app
+COPY --from=build /app/target/TaskList-0.0.1-SNAPSHOT-exec.jar ./application.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "application.jar"]
