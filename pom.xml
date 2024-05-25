@@ -22,7 +22,7 @@
         <spring-boot.version>3.2.5</spring-boot.version>
         <mapstruct.version>1.6.0.Beta1</mapstruct.version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
-        <jakarta-validation.version>3.1.0-M2</jakarta-validation.version>
+        <jakarta-validation.version>3.1.0</jakarta-validation.version>
         <jjwt.version>0.12.5</jjwt.version>
         <mybatis.version>3.0.3</mybatis.version>
         <liquibase.version>4.28.0</liquibase.version>
@@ -41,12 +41,6 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-docker-compose</artifactId>-->
-<!--            <scope>runtime</scope>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -177,6 +171,8 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
+                    <mainClass>com/javaded/TaskListApplicationTests</mainClass>
+                    <layout>JAR</layout>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
