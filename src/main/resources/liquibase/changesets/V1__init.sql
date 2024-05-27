@@ -31,3 +31,10 @@ CREATE TABLE IF NOT EXISTS users_roles
     PRIMARY KEY (user_id, role),
     CONSTRAINT fk_users_roles_users FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE NO ACTION
 );
+
+CREATE TABLE IF NOT EXISTS tasks_images
+(
+    task_id BIGINT       NOT NULL,
+    image   VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_tasks_images_tasks FOREIGN KEY (task_id) REFERENCES tasks (id) ON DELETE CASCADE ON UPDATE NO ACTION
+);

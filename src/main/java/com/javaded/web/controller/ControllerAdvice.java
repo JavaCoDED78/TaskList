@@ -2,6 +2,7 @@ package com.javaded.web.controller;
 
 import com.javaded.domain.exception.AccessDeniedException;
 import com.javaded.domain.exception.ExceptionBody;
+import com.javaded.domain.exception.ImageUploadException;
 import com.javaded.domain.exception.ResourceMappingException;
 import com.javaded.domain.exception.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolation;
@@ -19,7 +20,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toMap;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class ControllerAdvice {
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -66,6 +67,14 @@ public class ControllerAdvice {
                         ConstraintViolation::getMessage
                 )));
         return exceptionBody;
+    }
+
+    @ExceptionHandler(ImageUploadException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionBody handleImageUpload(
+            final ImageUploadException e
+    ) {
+        return new ExceptionBody(e.getMessage());
     }
 
 

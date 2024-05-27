@@ -41,10 +41,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @Caching(cacheable = {
-        @Cacheable(value = "UserService::getBId", key = "#user.id"),
-        @Cacheable(value = "UserService::getByUsername", key = "#user.username")
+        @Cacheable(value = "UserService::getBId", condition = "#result!=null", key = "#user.id"),
+        @Cacheable(value = "UserService::getByUsername",condition = "#result!=null", key = "#user.username")
     })
-    public User create(User user) {
+    public User create(final User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new IllegalStateException(String.format("User already exists with %s: ", user.getUsername()));
         }
@@ -52,22 +52,27 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("Password and password confirmation do not match");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.create(user);
         Set<Role> roles = Set.of(Role.ROLE_USER);
-        userRepository.insertUserRole(user.getId(), Role.ROLE_USER);
         user.setRoles(roles);
+        userRepository.save(user);
         return user;
     }
 
     @Override
     @Transactional
     @Caching(put = {
-        @CachePut(value = "UserService::getBId", key = "#user.id"),
-        @CachePut(value = "UserService::getByUsername", key = "#user.username")
+        @CachePut(value = "UserService::getBId", condition = "#result!=null", key = "#user.id"),
+        @CachePut(value = "UserService::getByUsername", condition = "#result!=null",key = "#user.username")
     })
     public User update(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new IllegalStateException(String.format("User already exists with %s: ", user.getUsername()));
+        }
+        if (!user.getPassword().equals(user.getPasswordConfirmation())) {
+            throw new IllegalStateException("Password and password confirmation do not match");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.update(user);
+        userRepository.save(user);
         return user;
     }
 
@@ -75,7 +80,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @CacheEvict(value = "UserService::getBId", key = "#id")
     public void delete(Long id) {
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 
     @Override

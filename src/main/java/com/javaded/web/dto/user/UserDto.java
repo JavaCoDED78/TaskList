@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Length;
 @Schema(description = "User DTO")
 public class UserDto {
 
-//    @Schema(description = "User id", example = "1")
+    @Schema(description = "User id", example = "1")
     @NotNull(message = "Id must be not null.", groups = OnUpdate.class)
     private Long id;
 

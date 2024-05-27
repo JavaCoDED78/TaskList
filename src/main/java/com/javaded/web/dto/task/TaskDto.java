@@ -1,6 +1,7 @@
 package com.javaded.web.dto.task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.javaded.domain.task.Status;
 import com.javaded.web.dto.validation.OnCreate;
 import com.javaded.web.dto.validation.OnUpdate;
@@ -10,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class TaskDto {
@@ -29,5 +31,10 @@ public class TaskDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime expirationDate;
+
+    @JsonProperty(
+            access = JsonProperty.Access.READ_ONLY
+    )
+    private List<String> images;
 
 }

@@ -1,6 +1,8 @@
 spring:
   config:
     import: optional:file:.env[.properties]
+#  jpa:
+#    open-in-view: false
   cache:
     type: redis
     cache-names: redis-cache
@@ -18,8 +20,6 @@ spring:
     change-log: classpath:liquibase/db.changelog.yaml
     enabled: true
     default-schema: ${POSTGRES_SCHEMA}
-mybatis:
-  mapper-locations: classpath:mybatis.mappers/*.xml
 
 security:
   jwt:
@@ -28,3 +28,9 @@ security:
     refresh: 30
 springdoc:
   override-with-generic-response: false
+
+minio:
+  bucket: ${MINIO_BUCKET}
+  url: ${MINIO_URL}
+  accessKey: ${MINIO_ACCESS_KEY}
+  secretKey: ${MINIO_SECRET_KEY}
