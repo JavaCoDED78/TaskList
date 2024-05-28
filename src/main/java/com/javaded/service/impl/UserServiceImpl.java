@@ -45,12 +45,7 @@ public class UserServiceImpl implements UserService {
         @Cacheable(value = "UserService::getByUsername",condition = "#result!=null", key = "#user.username")
     })
     public User create(final User user) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new IllegalStateException(String.format("User already exists with %s: ", user.getUsername()));
-        }
-        if (!user.getPassword().equals(user.getPasswordConfirmation())) {
-            throw new IllegalStateException("Password and password confirmation do not match");
-        }
+        check(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Set<Role> roles = Set.of(Role.ROLE_USER);
         user.setRoles(roles);
@@ -58,19 +53,23 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    @Transactional
-    @Caching(put = {
-        @CachePut(value = "UserService::getBId", condition = "#result!=null", key = "#user.id"),
-        @CachePut(value = "UserService::getByUsername", condition = "#result!=null",key = "#user.username")
-    })
-    public User update(User user) {
+    private void check(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new IllegalStateException(String.format("User already exists with %s: ", user.getUsername()));
         }
         if (!user.getPassword().equals(user.getPasswordConfirmation())) {
             throw new IllegalStateException("Password and password confirmation do not match");
         }
+    }
+
+    @Override
+    @Transactional
+    @Caching(put = {
+        @CachePut(value = "UserService::getBId", condition = "#result!=null", key = "#result.id"),
+        @CachePut(value = "UserService::getByUsername", condition = "#result!=null",key = "#result.username")
+    })
+    public User update(User user) {
+        check(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return user;

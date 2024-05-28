@@ -47,9 +47,8 @@ public class User implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private Set<Role> roles;
 
-    @CollectionTable(name = "users_tasks")
-    @OneToMany
-    @JoinColumn(name = "task_id")
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(inverseJoinColumns = @JoinColumn(name = "task_id"))
     private List<Task> tasks;
 
 }
