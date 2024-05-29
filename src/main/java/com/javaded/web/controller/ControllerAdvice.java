@@ -13,13 +13,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toMap;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class ControllerAdvice {
 
     @ExceptionHandler(ResourceNotFoundException.class)

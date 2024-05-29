@@ -22,20 +22,24 @@ public class TaskDto {
     @NotNull(message = "Title must be not null.", groups = {OnCreate.class,
             OnUpdate.class}
     )
-    @Length(max = 255, message =
-            "Title length must be smaller than 255 symbols.",
+    @Length(max = 255,
+            message = "Title length must be smaller than 255 symbols.",
             groups = {OnCreate.class, OnUpdate.class})
     private String title;
 
-    @Length(max = 255, message =
-            "Description length must be smaller than 255 symbols.",
+    @Length(max = 255,
+            message = "Description length must be smaller than 255 symbols.",
             groups = {OnCreate.class, OnUpdate.class})
     private String description;
 
     private Status status;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(
+            iso = DateTimeFormat.ISO.TIME
+    )
+    @JsonFormat(
+            pattern = "yyyy-MM-dd HH:mm"
+    )
     private LocalDateTime expirationDate;
 
     @JsonProperty(

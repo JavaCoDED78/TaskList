@@ -1,8 +1,8 @@
 spring:
   config:
     import: optional:file:.env[.properties]
-  #  jpa:
-  #    open-in-view: false
+  jpa:
+    open-in-view: false
   cache:
     type: redis
     cache-names: redis-cache
@@ -20,6 +20,9 @@ spring:
     change-log: classpath:liquibase/db.changelog.yaml
     enabled: true
     default-schema: ${POSTGRES_SCHEMA}
+  graphql:
+    graphiql:
+      enabled: true
 
 security:
   jwt:

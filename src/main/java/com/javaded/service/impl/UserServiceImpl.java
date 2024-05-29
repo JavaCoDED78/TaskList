@@ -18,13 +18,13 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional(readOnly = true)
     @Cacheable(value = "UserService::getBId", key = "#id")
     public User getBId(final Long id) {
         return userRepository.findById(id)
@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     @Cacheable(value = "UserService::getByUsername", key = "#username")
     public User getByUsername(final String username) {
         return userRepository.findByUsername(username)
@@ -45,11 +46,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @Caching(cacheable = {
-            @Cacheable(value = "UserService::getBId",
-                    condition = "#result!=null",
+            @Cacheable(value = "UserService::getById",
+                    condition = "#user.id!=null",
                     key = "#user.id"),
             @Cacheable(value = "UserService::getByUsername",
-                    condition = "#result!=null",
+                    condition = "#user.username!=null",
                     key = "#user.username")
     })
     public User create(final User user) {
@@ -78,15 +79,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @Caching(put = {
-            @CachePut(value = "UserService::getBId",
-                    condition = "#result!=null",
-                    key = "#result.id"),
+            @CachePut(value = "UserService::getById",
+                    key = "#user.id"),
             @CachePut(value = "UserService::getByUsername",
-                    condition = "#result!=null",
-                    key = "#result.username")
+                    key = "#user.username")
     })
     public User update(final User user) {
-        check(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return user;
@@ -100,6 +98,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     @Cacheable(value = "UserService::isTaskOwner",
             key = "#userId + '.' + #taskId")
     public boolean isTaskOwner(final Long userId, final Long taskId) {
