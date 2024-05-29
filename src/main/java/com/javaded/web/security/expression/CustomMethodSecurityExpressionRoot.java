@@ -16,7 +16,9 @@ import java.util.Arrays;
 
 @Setter
 @Getter
-public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
+public class CustomMethodSecurityExpressionRoot
+        extends SecurityExpressionRoot
+        implements MethodSecurityExpressionOperations {
 
     private Object filterObject;
     private Object returnObject;
@@ -25,25 +27,30 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
 
     private UserService userService;
 
-    public CustomMethodSecurityExpressionRoot(Authentication authentication) {
+    public CustomMethodSecurityExpressionRoot(
+            final Authentication authentication
+    ) {
         super(authentication);
     }
 
-    public boolean canAccessUser(Long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public boolean canAccessUser(final Long id) {
+        Authentication authentication = SecurityContextHolder
+                .getContext().getAuthentication();
         JwtEntity user = (JwtEntity) authentication.getPrincipal();
         Long userId = user.getId();
         return userId.equals(id) || hasAnyRole(authentication, Role.ROLE_ADMIN);
     }
 
-    private boolean hasAnyRole(Authentication authentication, Role... roles) {
+    private boolean hasAnyRole(final Authentication authentication,
+                               final Role... roles) {
         return Arrays.stream(roles)
                 .map(role -> new SimpleGrantedAuthority(role.name()))
                 .anyMatch(authentication.getAuthorities()::contains);
     }
 
-    public boolean canAccessTask(Long taskId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public boolean canAccessTask(final Long taskId) {
+        Authentication authentication = SecurityContextHolder.
+                getContext().getAuthentication();
         JwtEntity user = (JwtEntity) authentication.getPrincipal();
         Long id = user.getId();
         return userService.isTaskOwner(id, taskId);
@@ -53,5 +60,4 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
     public Object getThis() {
         return target;
     }
-
 }

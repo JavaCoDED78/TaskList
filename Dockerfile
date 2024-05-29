@@ -1,7 +1,8 @@
 FROM maven:3.9.6-amazoncorretto-21 AS build
 WORKDIR /app
-COPY src ./src
 COPY pom.xml ./
+COPY src ./src
+COPY checkstyle-suppressions.xml ./
 RUN mvn -f /app/pom.xml clean package
 
 FROM openjdk:21-jdk-slim

@@ -29,20 +29,22 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Cacheable(value = "TaskService::getById", key = "#id")
-    public Task getById(Long id) {
+    public Task getById(final Long id) {
         return taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Task not found with %s: ", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format("Task not found with %s: ", id))
+                );
     }
 
     @Override
-    public List<Task> getAllByUserId(Long id) {
+    public List<Task> getAllByUserId(final Long id) {
         return taskRepository.findAllByUserId(id);
     }
 
     @Override
     @Transactional
     @CachePut(value = "TaskService::getById", key = "#task.id")
-    public Task update(Task task) {
+    public Task update(final Task task) {
         if (task.getStatus() == null) {
             task.setStatus(Status.TODO);
         }
@@ -52,8 +54,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    @Cacheable(value = "TaskService::getAllByUserId", condition = "#result!=null", key = "#userId")
-    public Task create(Task task, Long userId) {
+    @Cacheable(value = "TaskService::getAllByUserId",
+            condition = "#result!=null",
+            key = "#userId")
+    public Task create(final Task task, final Long userId) {
         User user = userService.getBId(userId);
         task.setStatus(Status.TODO);
         user.getTasks().add(task);
@@ -61,18 +65,17 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
-
     @Override
     @Transactional
     @CacheEvict(value = "TaskService::getAllByUserId", key = "#id")
-    public void delete(Long id) {
+    public void delete(final Long id) {
         taskRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = "TaskService::getById", key = "#id")
-    public void uploadImage(Long id, TaskImage image) {
+    public void uploadImage(final Long id, final TaskImage image) {
         Task task = getById(id);
         String fileName = imageService.upload(image);
         task.getImages().add(fileName);

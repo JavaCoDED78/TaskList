@@ -20,8 +20,12 @@ public class JwtTokenFilter extends GenericFilterBean {
 
     @Override
     @SneakyThrows
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {
-        Optional<String> maybeBearerToken = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
+    public void doFilter(final ServletRequest servletRequest,
+                         final ServletResponse servletResponse,
+                         final FilterChain filterChain
+    ) {
+        Optional<String> maybeBearerToken = jwtTokenProvider
+                .resolveToken((HttpServletRequest) servletRequest);
         try {
             maybeBearerToken.ifPresent(this::onValidToken);
         } catch (Exception ignored) {
@@ -29,16 +33,18 @@ public class JwtTokenFilter extends GenericFilterBean {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private void onValidToken(String token) {
+    private void onValidToken(final String token) {
         if (jwtTokenProvider.isValid(token)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            Authentication authentication = jwtTokenProvider
+                    .getAuthentication(token);
             authenticate(authentication);
         }
     }
 
-    private void authenticate(Authentication authentication) {
+    private void authenticate(final Authentication authentication) {
         if (authentication != null) {
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext()
+                    .setAuthentication(authentication);
         }
     }
 }

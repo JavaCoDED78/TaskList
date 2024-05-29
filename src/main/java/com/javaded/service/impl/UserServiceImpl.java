@@ -26,23 +26,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Cacheable(value = "UserService::getBId", key = "#id")
-    public User getBId(Long id) {
+    public User getBId(final Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("User not found with %s: ", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format("User not found with %s: ", id))
+                );
     }
 
     @Override
     @Cacheable(value = "UserService::getByUsername", key = "#username")
-    public User getByUsername(String username) {
+    public User getByUsername(final String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("User not found with %s: ", username)));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format("User not found with %s: ", username))
+                );
     }
 
     @Override
     @Transactional
     @Caching(cacheable = {
-        @Cacheable(value = "UserService::getBId", condition = "#result!=null", key = "#user.id"),
-        @Cacheable(value = "UserService::getByUsername",condition = "#result!=null", key = "#user.username")
+            @Cacheable(value = "UserService::getBId",
+                    condition = "#result!=null",
+                    key = "#user.id"),
+            @Cacheable(value = "UserService::getByUsername",
+                    condition = "#result!=null",
+                    key = "#user.username")
     })
     public User create(final User user) {
         check(user);
@@ -53,22 +61,31 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private void check(User user) {
+    private void check(final User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new IllegalStateException(String.format("User already exists with %s: ", user.getUsername()));
+            throw new IllegalStateException(
+                    String.format("User already exists with %s: ",
+                            user.getUsername())
+            );
         }
         if (!user.getPassword().equals(user.getPasswordConfirmation())) {
-            throw new IllegalStateException("Password and password confirmation do not match");
+            throw new IllegalStateException(
+                    "Password and password confirmation do not match"
+            );
         }
     }
 
     @Override
     @Transactional
     @Caching(put = {
-        @CachePut(value = "UserService::getBId", condition = "#result!=null", key = "#result.id"),
-        @CachePut(value = "UserService::getByUsername", condition = "#result!=null",key = "#result.username")
+            @CachePut(value = "UserService::getBId",
+                    condition = "#result!=null",
+                    key = "#result.id"),
+            @CachePut(value = "UserService::getByUsername",
+                    condition = "#result!=null",
+                    key = "#result.username")
     })
-    public User update(User user) {
+    public User update(final User user) {
         check(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -78,13 +95,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @CacheEvict(value = "UserService::getBId", key = "#id")
-    public void delete(Long id) {
+    public void delete(final Long id) {
         userRepository.deleteById(id);
     }
 
     @Override
-    @Cacheable(value = "UserService::isTaskOwner", key = "#userId + '.' + #taskId")
-    public boolean isTaskOwner(Long userId, Long taskId) {
+    @Cacheable(value = "UserService::isTaskOwner",
+            key = "#userId + '.' + #taskId")
+    public boolean isTaskOwner(final Long userId, final Long taskId) {
         return userRepository.isTaskOwner(userId, taskId);
     }
 }

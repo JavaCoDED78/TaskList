@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,19 +28,20 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public JwtResponse login(@Validated @RequestBody JwtRequest loginRequest) {
+    public JwtResponse login(
+            @Validated @RequestBody final JwtRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
     @PostMapping("/register")
-    public UserDto register(@Validated @RequestBody UserDto userDto) {
+    public UserDto register(@Validated @RequestBody final UserDto userDto) {
         User user = userMapper.toEntity(userDto);
         User userCreated = userService.create(user);
         return userMapper.toDto(userCreated);
     }
 
     @PostMapping("/refresh")
-    public JwtResponse refreshToken(@RequestBody String refreshToken) {
+    public JwtResponse refreshToken(@RequestBody final String refreshToken) {
         return authService.refresh(refreshToken);
     }
 }
