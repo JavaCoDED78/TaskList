@@ -107,7 +107,7 @@ public class ApplicationConfig {
                                     response.getWriter().write("Unauthorized.");
                                 })
                 )
-                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                .authorizeHttpRequests(authHttpRequests -> authHttpRequests
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
