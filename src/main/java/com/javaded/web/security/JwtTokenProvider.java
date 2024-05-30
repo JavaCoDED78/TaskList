@@ -77,7 +77,7 @@ public class JwtTokenProvider {
             throw new AccessDeniedException();
         }
         Long userId = Long.valueOf(extractIdFromToken(refreshToken));
-        User user = userService.getBId(userId);
+        User user = userService.getById(userId);
         return JwtResponse.builder()
                 .id(userId)
                 .username(user.getUsername())

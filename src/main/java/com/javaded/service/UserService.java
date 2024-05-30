@@ -4,7 +4,7 @@ import com.javaded.domain.user.User;
 
 public interface UserService {
 
-    User getBId(Long id);
+    User getById(Long id);
 
     User getByUsername(String username);
 
