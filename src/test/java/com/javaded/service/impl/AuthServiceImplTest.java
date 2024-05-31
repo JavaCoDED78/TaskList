@@ -10,6 +10,7 @@ import com.javaded.service.UserService;
 import com.javaded.web.dto.auth.JwtRequest;
 import com.javaded.web.dto.auth.JwtResponse;
 import com.javaded.web.security.JwtTokenProvider;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -39,7 +40,7 @@ public class AuthServiceImplTest {
     private AuthenticationManager authenticationManager;
 
     @MockBean
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @MockBean
     private UserRepository userRepository;
@@ -95,6 +96,8 @@ public class AuthServiceImplTest {
         JwtRequest request = new JwtRequest();
         request.setUsername(username);
         request.setPassword(password);
+        User user = new User();
+        user.setUsername(username);
         Mockito.when(userService.getByUsername(username))
                 .thenThrow(ResourceNotFoundException.class);
         Mockito.verifyNoInteractions(tokenProvider);
@@ -104,8 +107,8 @@ public class AuthServiceImplTest {
 
     @Test
     void refresh() {
-        String accessToken = "accessToken";
         String refreshToken = "refreshToken";
+        String accessToken = "accessToken";
         String newRefreshToken = "newRefreshToken";
         JwtResponse response = JwtResponse.builder()
                 .accessToken(accessToken)
@@ -115,6 +118,6 @@ public class AuthServiceImplTest {
                 .thenReturn(response);
         JwtResponse testResponse = authService.refresh(refreshToken);
         Mockito.verify(tokenProvider).refreshUserTokens(refreshToken);
-        assertEquals(response, testResponse);
+        assertEquals(testResponse, response);
     }
 }

@@ -1,6 +1,5 @@
 package com.javaded.domain.task;
 
-
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -12,7 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -20,7 +20,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "tasks")
-@Data
+@Getter
+@Setter
 public class Task implements Serializable {
 
     @Id

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +20,7 @@ import org.springframework.security.access.expression.method.MethodSecurityExpre
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -32,7 +33,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))
 
 public class ApplicationConfig {
@@ -46,9 +47,10 @@ public class ApplicationConfig {
     }
 
     @Bean
+    @SneakyThrows
     public AuthenticationManager authenticationManager(
             final AuthenticationConfiguration authenticationConfiguration
-    ) throws Exception {
+    ) {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -82,8 +84,10 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(final HttpSecurity httpSecurity)
-            throws Exception {
+    @SneakyThrows
+    public SecurityFilterChain filterChain(
+            final HttpSecurity httpSecurity
+    ) {
         httpSecurity
                 .csrf(CsrfConfigurer::disable)
                 .cors(Customizer.withDefaults())

@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Validated
-@Tag(name = "Auth Controller", description = "Auth API")
+@Tag(
+        name = "Auth Controller",
+        description = "Auth API"
+)
 public class AuthController {
 
     private final AuthService authService;
@@ -29,19 +32,24 @@ public class AuthController {
 
     @PostMapping("/login")
     public JwtResponse login(
-            @Validated @RequestBody final JwtRequest loginRequest) {
+            @Validated @RequestBody final JwtRequest loginRequest
+    ) {
         return authService.login(loginRequest);
     }
 
     @PostMapping("/register")
-    public UserDto register(@Validated @RequestBody final UserDto userDto) {
+    public UserDto register(
+            @Validated @RequestBody final UserDto userDto
+    ) {
         User user = userMapper.toEntity(userDto);
         User userCreated = userService.create(user);
         return userMapper.toDto(userCreated);
     }
 
     @PostMapping("/refresh")
-    public JwtResponse refreshToken(@RequestBody final String refreshToken) {
+    public JwtResponse refreshToken(
+            @RequestBody final String refreshToken
+    ) {
         return authService.refresh(refreshToken);
     }
 }

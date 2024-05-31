@@ -49,5 +49,4 @@ public class User implements Serializable {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(inverseJoinColumns = @JoinColumn(name = "task_id"))
     private List<Task> tasks;
-
 }

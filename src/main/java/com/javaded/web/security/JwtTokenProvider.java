@@ -44,9 +44,10 @@ public class JwtTokenProvider {
                 );
     }
 
-    public String createAccessToken(final Long userId,
-                                    final String username,
-                                    final Set<Role> roles
+    public String createAccessToken(
+            final Long userId,
+            final String username,
+            final Set<Role> roles
     ) {
         Claims claims = Jwts.claims()
                 .subject(username)
@@ -60,8 +61,9 @@ public class JwtTokenProvider {
         return compactClams(claims, validity);
     }
 
-    public String createRefreshToken(final Long userId,
-                                     final String username
+    public String createRefreshToken(
+            final Long userId,
+            final String username
     ) {
         Claims claims = Jwts.claims()
                 .subject(username)
@@ -72,7 +74,9 @@ public class JwtTokenProvider {
         return compactClams(claims, validity);
     }
 
-    public JwtResponse refreshUserTokens(final String refreshToken) {
+    public JwtResponse refreshUserTokens(
+            final String refreshToken
+    ) {
         if (!isValid(refreshToken)) {
             throw new AccessDeniedException();
         }
@@ -92,7 +96,9 @@ public class JwtTokenProvider {
                 .build();
     }
 
-    private String extractIdFromToken(final String token) {
+    private String extractIdFromToken(
+            final String token
+    ) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
@@ -101,7 +107,9 @@ public class JwtTokenProvider {
                 .get("id", String.class);
     }
 
-    public boolean isValid(final String token) {
+    public boolean isValid(
+            final String token
+    ) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
@@ -111,7 +119,9 @@ public class JwtTokenProvider {
                 .after(new Date());
     }
 
-    public Authentication getAuthentication(final String token) {
+    public Authentication getAuthentication(
+            final String token
+    ) {
         UserDetails userDetails = userDetailsService
                 .loadUserByUsername(getUsernameFromToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails,
@@ -120,7 +130,9 @@ public class JwtTokenProvider {
         );
     }
 
-    private String getUsernameFromToken(final String token) {
+    private String getUsernameFromToken(
+            final String token
+    ) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
@@ -139,8 +151,9 @@ public class JwtTokenProvider {
         return Optional.ofNullable(bearerToken);
     }
 
-    private String compactClams(final Claims claims,
-                                final Instant validity
+    private String compactClams(
+            final Claims claims,
+            final Instant validity
     ) {
         return Jwts.builder()
                 .claims(claims)
@@ -149,7 +162,9 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    private List<String> resolveRoles(final Set<Role> roles) {
+    private List<String> resolveRoles(
+            final Set<Role> roles
+    ) {
         return roles.stream()
                 .map(Enum::name)
                 .toList();
