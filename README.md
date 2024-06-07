@@ -1,5 +1,7 @@
 # Tasklist
 
+[![codecov](https://codecov.io/gh/JavaCoDED78/TaskList/graph/badge.svg?token=QFTWYEJD7S)](https://codecov.io/gh/JavaCoDED78/TaskList)
+
 This application helps you organize creating and accessing tasks for users.
 
 You can access Swagger and see all available endpoints by
