@@ -24,7 +24,7 @@
         <jsqlparser.version>5.0</jsqlparser.version>
         <springdoc.version>2.6.0</springdoc.version>
         <minio.version>8.5.12</minio.version>
-        <xml-format.version>3.3.1</xml-format.version>
+        <xml-format.version>4.0.1</xml-format.version>
         <checkstyle.version>3.5.0</checkstyle.version>
         <graphql-java-kickstart.version>16.0.0</graphql-java-kickstart.version>
         <graphql-java-extended-scalars.version>0.0.0-2024-07-03T06-42-34-e7d9e3e</graphql-java-extended-scalars.version>
