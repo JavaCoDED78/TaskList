@@ -22,7 +22,7 @@
         <liquibase.version>4.30.0</liquibase.version>
         <preliquibase.version>1.5.1</preliquibase.version>
         <jsqlparser.version>5.0</jsqlparser.version>
-        <springdoc.version>2.6.0</springdoc.version>
+        <springdoc.version>2.7.0</springdoc.version>
         <minio.version>8.5.13</minio.version>
         <xml-format.version>4.0.1</xml-format.version>
         <checkstyle.version>3.6.0</checkstyle.version>
