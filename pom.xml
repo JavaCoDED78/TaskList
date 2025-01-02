@@ -21,7 +21,7 @@
         <jjwt.version>0.12.6</jjwt.version>
         <liquibase.version>4.30.0</liquibase.version>
         <preliquibase.version>1.6.0</preliquibase.version>
-        <jsqlparser.version>5.0</jsqlparser.version>
+        <jsqlparser.version>5.1</jsqlparser.version>
         <springdoc.version>2.7.0</springdoc.version>
         <minio.version>8.5.13</minio.version>
         <xml-format.version>4.0.1</xml-format.version>
