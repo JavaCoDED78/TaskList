@@ -23,7 +23,7 @@
         <preliquibase.version>1.6.0</preliquibase.version>
         <jsqlparser.version>5.0</jsqlparser.version>
         <springdoc.version>2.7.0</springdoc.version>
-        <minio.version>8.5.13</minio.version>
+        <minio.version>8.5.17</minio.version>
         <xml-format.version>4.0.1</xml-format.version>
         <checkstyle.version>3.6.0</checkstyle.version>
         <graphql-java-kickstart.version>16.0.0</graphql-java-kickstart.version>
