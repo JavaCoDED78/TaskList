@@ -19,7 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mapstruct.version>1.6.3</mapstruct.version>
         <jjwt.version>0.12.6</jjwt.version>
-        <liquibase.version>4.31.0</liquibase.version>
+        <liquibase.version>4.31.1</liquibase.version>
         <preliquibase.version>1.6.0</preliquibase.version>
         <jsqlparser.version>5.1</jsqlparser.version>
         <springdoc.version>2.8.5</springdoc.version>
