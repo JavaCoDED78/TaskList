@@ -28,7 +28,7 @@
         <checkstyle.version>3.6.0</checkstyle.version>
         <graphql-java-kickstart.version>16.0.0</graphql-java-kickstart.version>
         <graphql-java-extended-scalars.version>0.0.0-2024-07-03T06-42-34-e7d9e3e</graphql-java-extended-scalars.version>
-        <jacoco.version>0.8.12</jacoco.version>
+        <jacoco.version>0.8.14</jacoco.version>
     </properties>
 
     <dependencies>
